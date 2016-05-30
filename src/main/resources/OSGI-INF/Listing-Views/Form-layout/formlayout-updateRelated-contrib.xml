@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="org.athento.nuxeo.athento-nx-automatic-metadata-operations.formlayout-updateRelated"
+	version="1.0.0">
+	<require>org.nuxeo.runtime.started</require>
+
+	<extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+		point="layouts">
+		<layout name="layout@formlayout-updateRelated">
+			<templates>
+				<template mode="any">/layouts/updateRelated_widget_layout_template.xhtml
+				</template>
+			</templates>
+			<rows>
+				<row>
+					<properties mode="any">
+						<property name="nxl_colspan_0">1</property>
+					</properties>
+					<widget>enableUpdateRelated</widget>
+				</row>
+				<row>
+					<properties mode="any">
+						<property name="nxl_colspan_0">1</property>
+					</properties>
+					<widget>sourceMetadata</widget>
+				</row>
+				<row>
+					<properties mode="any">
+						<property name="nxl_colspan_0">1</property>
+					</properties>
+					<widget>destinationMetadata</widget>
+				</row>
+				<row>
+					<properties mode="any">
+						<property name="nxl_colspan_0">1</property>
+					</properties>
+					<widget>operationMetadata</widget>
+				</row>
+				<row>
+					<properties mode="any">
+						<property name="nxl_colspan_0">1</property>
+					</properties>
+					<widget>relationid</widget>
+				</row>
+				<row>
+					<properties mode="any">
+						<property name="nxl_colspan_0">1</property>
+					</properties>
+					<widget>saveMetadata</widget>
+				</row>
+			</rows>
+			<widget name="destinationMetadata" type="text">
+				<labels>
+					<label mode="any">label.updateRelated.destinationMetadata</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:destinationMetadata</field>
+				</fields>
+			</widget>
+			<widget name="enableUpdateRelated" type="checkbox">
+				<labels>
+					<label mode="any">label.updateRelated.enableUpdateRelated</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:enableUpdateRelated</field>
+				</fields>
+			</widget>
+			<widget name="operationMetadata" type="text">
+				<labels>
+					<label mode="any">label.updateRelated.operationMetadata</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:operationMetadata</field>
+				</fields>
+			</widget>
+			<widget name="operationMetadata" type="selectOneDirectory">
+				<labels>
+					<label mode="any">label.updateRelated.operationMetadata</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:operationMetadata</field>
+				</fields>
+				<properties widgetMode="any">
+					<property name="directoryName">operation</property>
+					<property name="localize">true</property>
+					<property name="ordering">ordering</property>
+				</properties>
+			</widget>
+			<widget name="relationid" type="selectOneDirectory">
+				<labels>
+					<label mode="any">label.updateRelated.relationid</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:relationid</field>
+				</fields>
+				
+				<properties widgetMode="any">
+					<property name="directoryName">predicates</property>
+					<property name="localize">true</property>
+					<property name="ordering">ordering</property>
+				</properties>
+			</widget>
+			<widget name="saveMetadata" type="checkbox">
+				<labels>
+					<label mode="any">label.updateRelated.saveMetadata</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:saveMetadata</field>
+				</fields>
+			</widget><widget name="sourceMetadata" type="text">
+				<labels>
+					<label mode="any">label.updateRelated.sourceMetadata</label>
+				</labels>
+				<translated>true</translated>
+				<fields>
+					<field>updateRelated:sourceMetadata</field>
+				</fields>
+			</widget>
+		</layout>
+
+	</extension>
+</component>

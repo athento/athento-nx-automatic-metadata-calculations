@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="org.athento.nuxeo.Corporinoquia.vocabularies"
+	version="1.0.0">
+	<require>org.nuxeo.runtime.started</require>
+
+	<extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
+		point="directories">
+
+		<directory name="operation">
+			<schema>vocabulary</schema>
+			<dataSource>java:/nxsqldirectory</dataSource>
+			<cacheTimeout>3600</cacheTimeout>
+			<cacheMaxSize>1000</cacheMaxSize>
+			<idField>id</idField>
+			<autoincrementIdField>false</autoincrementIdField>
+			<createTablePolicy>on_missing_columns</createTablePolicy>
+			<table>vocabulary_operation</table>
+			<dataFile>data/vocabularies/operation.csv</dataFile>
+		</directory>
+
+	</extension>
+
+	<extension target="org.nuxeo.ecm.directory.ui.DirectoryUIManager"
+		point="directories">
+
+		<directory name="operation" layout="vocabulary" sortField="ordering" />
+
+	</extension>
+
+</component>

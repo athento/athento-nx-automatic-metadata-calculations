@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:nxs="http://www.athento.com/ecm/schemas/athento/updateRelated"
+	targetNamespace="http://www.athento.com/ecm/schemas/athento/updateRelated">
+	<!-- helper XSD definitions for list types -->
+	<xs:complexType name="content">
+		<xs:sequence>
+			<xs:element name="encoding" type="xs:string" />
+			<xs:element name="mime-type" type="xs:string" />
+			<xs:element name="data" type="xs:base64Binary" />
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="length" type="xs:long" />
+			<xs:element name="digest" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="stringList">
+		<xs:list itemType="xs:string" />
+	</xs:simpleType>
+	<xs:simpleType name="doubleList">
+		<xs:list itemType="xs:double" />
+	</xs:simpleType>
+	<xs:simpleType name="dateList">
+		<xs:list itemType="xs:date" />
+	</xs:simpleType>
+	<xs:simpleType name="integerList">
+		<xs:list itemType="xs:integer" />
+	</xs:simpleType>
+	<xs:simpleType name="booleanList">
+		<xs:list itemType="xs:boolean" />
+	</xs:simpleType>
+	<xs:complexType name="blobList">
+		<xs:sequence>
+			<xs:element name="item" type="nxs:content" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Extended Config: Update Related -->
+	
+	
+	<!-- XPath to update the value to operate with -->
+	<xs:element name="destinationMetadata" type="xs:string"/>
+	<!-- If true, Update Related is enabled -->
+	<xs:element name="enableUpdateRelated" type="xs:boolean"  default="false"/>
+	<!-- Operation to execute over Source Metadata -->
+	<xs:element name="operationMetadata" type="xs:string" />
+	<!-- Relation to bound the calculation to -->
+	<xs:element name="relationid" type="xs:string" />
+	<!-- True to save the value in doctype -->
+	<xs:element name="saveMetadata" type="xs:boolean" default="false"/>	
+	<!-- XPath to read the source values to operate with -->
+	<xs:element name="sourceMetadata" type="xs:string" />
+
+</xs:schema>

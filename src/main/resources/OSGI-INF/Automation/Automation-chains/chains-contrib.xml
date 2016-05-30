@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component
+	name="org.athento.nuxeo.athento-nx-automatic-metadata-calculations.chains"
+	version="1.0.0">
+	<require>org.nuxeo.runtime.started</require>
+
+	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
+		point="chains">
+
+		<chain id="ExtendedConfig.consolidate">
+
+			<documentation>
+				Last step. Result of the operation is stored in
+				destination xpath for the main document.
+			</documentation>
+
+			<operation id="Document.Fetch">
+				<param type="document" name="value">expr:relationed_main_doc[0]
+				</param>
+			</operation>
+			<operation id="Auth.LoginAs">
+				<param type="string" name="name">Administrator</param>
+			</operation>
+			<operation id="Document.SetProperty">
+				<param type="string" name="xpath">expr:destinationMetadata</param>
+				<param type="boolean" name="save">expr:saveMetadata</param>
+				<param type="serializable" name="value">expr:operationValue</param>
+			</operation>
+			<operation id="Auth.Logout" />
+			<operation id="LogOperation">
+				<param type="string" name="level">debug</param>
+				<param type="string" name="message">expr:@{"Saved operation value in
+					main document, value: "+operationValue+", in:
+					"+relationed_main_doc[0].id}
+				</param>
+			</operation>
+		</chain>
+
+		<chain id="updateRelated-checkEnabled">
+
+			<documentation>
+				***** MAIN UPDATE RELATED CHAIN ******
+				Updates related documents via configurable operation.
+				Checks if enabled. If enabled, run all update logic:
+
+				updateRelated-checkEnabled
+				|
+				+-ExtendedConfig.updateRelated-searchMainRelated
+				  |
+				  +- ExtendedConfig.updateRelated-operateOnRelatedDocuments
+				     |
+				     +operationMetadata (ExtendedConfig.updateRelated-sumRelated)
+				     +ExtendedConfig.updateRelated-consolidate
+				***************************************
+			</documentation>
+
+			<operation id="Context.FetchDocument" />
+			<operation id="Document.Push" />
+			<operation id="Auth.LoginAs">
+				<param type="string" name="name">Administrator</param>
+			</operation>
+			<operation id="Document.Fetch">
+				<param type="document" name="value">/ExtendedConfig</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">enableUpdateRelated</param>
+				<param type="string" name="value">expr:@{Document["updateRelated:enableUpdateRelated"]}
+				</param>
+			</operation>
+			<operation id="Document.Pop" />
+			<operation id="LogOperation">
+				<param type="string" name="level">debug</param>
+				<param type="string" name="message">expr:@{"Update Related enabled"}
+				</param>
+			</operation>
+			<operation id="Context.RunOperation">
+				<param type="string" name="id">expr:(enableUpdateRelated ==
+					true ?
+					"ExtendedConfig.searchMainRelated": "voidchain")
+				</param>
+				<param type="boolean" name="isolate">false</param>
+			</operation>
+			<operation id="Auth.Logout" />
+		</chain>
+		
+		<chain id="ExtendedConfig.updateRelated-operateOnRelatedDocuments">
+
+			<documentation>
+				Once in the main document, runs over all related
+				documents, and operates on them
+			</documentation>
+
+			<operation id="Document.Fetch">
+				<param type="document" name="value">expr:relationed_main_doc[0]
+				</param>
+			</operation>
+			<operation id="Relations.GetRelations">
+				<param type="string" name="predicate">expr:@{relationid}
+				</param>
+				<param type="boolean" name="outgoing">false</param>
+			</operation>
+			<operation id="Context.SetInputAsVar">
+				<param type="string" name="name">relationed_docs</param>
+			</operation>
+			<operation id="LogOperation">
+				<param type="string" name="level">debug</param>
+				<param type="string" name="message">expr:@{"Documents related to:
+					"+relationed_docs.toString()}
+				</param>
+			</operation>
+			<operation id="Context.RunOperationOnList">
+				<param type="string" name="id">expr:relationed_docs == empty ?
+					"voidchain" :
+					operationMetadata
+				</param>
+				<param type="string" name="list">relationed_docs</param>
+				<param type="string" name="item">item</param>
+				<param type="boolean" name="newTx">false</param>
+				<param type="boolean" name="rollbackGlobalOnError">true</param>
+				<param type="boolean" name="isolate">false</param>
+			</operation>
+			<operation id="Context.RunOperation">
+				<param type="string" name="id">expr:relationed_docs == empty ?
+					"voidchain" : "ExtendedConfig.consolidate"
+				</param>
+				<param type="boolean" name="isolate">false</param>
+			</operation>
+		</chain>
+
+		<chain id="ExtendedConfig.searchMainRelated">
+
+			<documentation>
+				Having fetched the document related, searches the
+				destination in the
+				relation, so it will call another Chain to search
+				all other related items.
+				Right now it is supposed to be related only
+				to one main document
+				(the main document
+				is the one that will have many
+				relations (or not))
+			</documentation>
+
+			<operation id="Document.Push" />
+			<operation id="Auth.LoginAs">
+				<param type="string" name="name">Administrator</param>
+			</operation>
+			<operation id="Document.Fetch">
+				<param type="document" name="value">/ExtendedConfig</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">sourceMetadata</param>
+				<param type="string" name="value">expr:@{Document["updateRelated:sourceMetadata"]}
+				</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">destinationMetadata</param>
+				<param type="string" name="value">expr:@{Document["updateRelated:destinationMetadata"]}
+				</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">operationMetadata</param>
+				<param type="string" name="value">expr:@{Document["operationMetadata"]}
+				</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">relationid</param>
+				<param type="string" name="value">expr:@{Document["updateRelated:relationid"]}
+				</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">saveMetadata</param>
+				<param type="string" name="value">expr:@{Document["updateRelated:saveMetadata"]}
+				</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">operationValue</param>
+				<param type="string" name="value">expr:new java.lang.Double(0)
+				</param>
+			</operation>
+			<operation id="Auth.Logout" />
+			<operation id="Document.Pop" />
+			<operation id="Relations.GetRelations">
+				<param type="string" name="predicate">expr:@{relationid}
+				</param>
+				<param type="boolean" name="outgoing">true</param>
+			</operation>
+			<operation id="Context.SetInputAsVar">
+				<param type="string" name="name">relationed_main_doc</param>
+			</operation>
+			<operation id="LogOperation">
+				<param type="string" name="level">debug</param>
+				<param type="string" name="message">expr:@{"Main document:
+					"+relationed_main_doc.toString()}
+				</param>
+			</operation>
+			<operation id="Context.RunOperation">
+				<param type="string" name="id">expr:relationed_main_doc == empty ?
+					"voidchain" : "ExtendedConfig.updateRelated-operateOnRelatedDocuments"
+				</param>
+				<param type="boolean" name="isolate">false</param>
+			</operation>
+		</chain>
+
+		<chain id="ExtendedConfig.sumRelated">
+
+			<documentation>
+				operation to execute over related documents, using
+				their source xpath.
+			</documentation>
+
+			<operation id="Document.Fetch">
+				<param type="document" name="value">expr:item.id</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">valueToSum</param>
+				<param type="string" name="value">expr:Document[sourceMetadata]
+				</param>
+			</operation>
+			<operation id="Context.SetVar">
+				<param type="string" name="name">operationValue</param>
+				<param type="string" name="value">expr:operationValue + valueToSum
+				</param>
+			</operation>
+		</chain>
+
+		<chain id="voidchain">
+			<operation id="Context.FetchDocument" />
+		</chain>
+
+	</extension>
+
+</component>
