@@ -4,6 +4,7 @@ Bundle-Vendor: Athento
 Bundle-Version: 1.0.0
 Bundle-Name: Athento NX Automatic Metadata Calculations
 Nuxeo-Component: OSGI-INF/Automation/Automation-chains/chains-contrib.xml,
+Nuxeo-Component: OSGI-INF/Automation/Event-handlers/eventhandler-contrib.xml,
  OSGI-INF/Content-model/Documents/doctype-contrib.xml, 
  OSGI-INF/Content-model/Life-cycle/lifecycle-contrib.xml,
  OSGI-INF/Content-model/Schemas/schemas-contrib.xml,
