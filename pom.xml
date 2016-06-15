@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.athento.nuxeo</groupId>
 	<artifactId>athento-nx-automatic-metadata-calculations</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<name>Athento NX Automatic Metadata Calculations</name>
 	<description>Athento NX Automatic Metadata Calculations</description>
 

@@ -36,7 +36,7 @@
 				</param>
 			</operation>
 		</chain>
-
+		
 		<chain id="updateRelated-checkEnabled">
 
 			<documentation>
@@ -176,7 +176,7 @@
 			</operation>
 			<operation id="Context.SetVar">
 				<param type="string" name="name">operationValue</param>
-				<param type="string" name="value">expr:new java.lang.Double(0)
+				<param type="double" name="value">expr:new java.lang.Double(0)
 				</param>
 			</operation>
 			<operation id="Auth.Logout" />
@@ -215,12 +215,12 @@
 			</operation>
 			<operation id="Context.SetVar">
 				<param type="string" name="name">valueToSum</param>
-				<param type="string" name="value">expr:Document[sourceMetadata]
+				<param type="double" name="value">expr:Document[sourceMetadata] == empty ? 0 : Document[sourceMetadata]
 				</param>
 			</operation>
 			<operation id="Context.SetVar">
 				<param type="string" name="name">operationValue</param>
-				<param type="string" name="value">expr:operationValue + valueToSum
+				<param type="double" name="value">expr:operationValue + valueToSum
 				</param>
 			</operation>
 		</chain>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <component
-	name="org.athento.nuxeo.athento-nx-automatic-metadata-calculations.schemas"
+	name="org.athento.nuxeo.athento-nx-automatic-metadata-calculations.extended-config-schemas"
 	version="1.0.0">
 	<require>org.nuxeo.runtime.started</require>
 
